@@ -4,14 +4,11 @@ using UnityEngine;
 using UnityEngine.VR.WSA.Input;
 
 public class Cursor : MonoBehaviour {
-    private MeshRenderer meshRenderer;
     private GameObject lastHitGameObject;
     GestureRecognizer recognizer;
 
 	// Use this for initialization
 	void Start () {
-        meshRenderer = gameObject.GetComponentInChildren<MeshRenderer>();
-
         recognizer = new GestureRecognizer();
         recognizer.TappedEvent += ToggleCubeGrab;
         recognizer.StartCapturingGestures();
