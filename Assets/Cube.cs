@@ -16,6 +16,7 @@ public class Cube : MonoBehaviour {
             var headPosition = Camera.main.transform.position;
             var gazeDirection = Camera.main.transform.forward;
             this.gameObject.transform.position = headPosition + gazeDirection * 2;
+            this.gameObject.transform.rotation = Camera.main.transform.rotation;
             Destroy(this.gameObject.GetComponent<Rigidbody>());
         }		
         else {
