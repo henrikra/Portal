@@ -20,7 +20,9 @@ public class Cube : MonoBehaviour {
             Destroy(this.gameObject.GetComponent<Rigidbody>());
         }		
         else {
-            this.gameObject.AddComponent<Rigidbody>();
+            if (!this.gameObject.GetComponent<Rigidbody>()) {
+                this.gameObject.AddComponent<Rigidbody>();
+            }
         }
     }
 
