@@ -7,12 +7,22 @@ public class Cursor : MonoBehaviour {
     private GameObject lastHitGameObject;
     GestureRecognizer recognizer;
     private bool shouldShootBluePortal = true;
+    AudioSource audioSource;
+    AudioClip portalGunShooting;
 
 	// Use this for initialization
 	void Start () {
         recognizer = new GestureRecognizer();
         recognizer.TappedEvent += ToggleCubeGrab;
         recognizer.StartCapturingGestures();
+
+        audioSource = this.gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialize = true;
+        audioSource.spatialBlend = 1.0f;
+        audioSource.dopplerLevel = 0.0f;
+        audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
+        portalGunShooting = Resources.Load<AudioClip>("PortalGunShooting");
 	}
 
     private void ToggleCubeGrab(InteractionSourceKind source, int tapCount, Ray headRay) {
@@ -39,6 +49,9 @@ public class Cursor : MonoBehaviour {
                 newPortal.AddComponent<BluePortal>();
 
                 shouldShootBluePortal = !shouldShootBluePortal;
+
+                audioSource.clip = portalGunShooting;
+                audioSource.Play();
             }
         }
     }
