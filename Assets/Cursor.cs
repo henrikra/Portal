@@ -49,9 +49,7 @@ public class Cursor : MonoBehaviour {
             resetSelection();
         }
 		if (Input.GetKeyUp(KeyCode.Space)) {
-            InteractionSourceKind lol = new InteractionSourceKind();
-            Ray lol2 = new Ray();
-            ToggleCubeGrab(lol, 2, lol2);
+            ToggleCubeGrab(new InteractionSourceKind(), 1, new Ray());
         }
 	}
 }
