@@ -35,6 +35,9 @@ public class Cursor : MonoBehaviour {
         RaycastHit hitInfo;
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo)) {
             if (hitInfo.distance <= 2) {
+                if (lastHitGameObject != null && lastHitGameObject != hitInfo.transform.gameObject) {
+                    lastHitGameObject.SendMessage("OnDeselect");
+                }
                 hitInfo.transform.gameObject.SendMessage("OnSelect");
                 lastHitGameObject = hitInfo.transform.gameObject;
             }
