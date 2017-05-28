@@ -15,13 +15,13 @@ public class Cursor : MonoBehaviour {
 	}
 
     private void ToggleCubeGrab(InteractionSourceKind source, int tapCount, Ray headRay) {
-        if (lastHitGameObject != null) {
+        if (lastHitGameObject) {
             lastHitGameObject.SendMessage("OnGrab");
         }
     }
 
     void resetSelection () {
-        if (lastHitGameObject != null) {
+        if (lastHitGameObject) {
             lastHitGameObject.SendMessage("OnDeselect");
             lastHitGameObject = null;
         }
@@ -35,7 +35,7 @@ public class Cursor : MonoBehaviour {
         RaycastHit hitInfo;
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo)) {
             if (hitInfo.distance <= 2) {
-                if (lastHitGameObject != null && lastHitGameObject != hitInfo.transform.gameObject) {
+                if (lastHitGameObject && lastHitGameObject != hitInfo.transform.gameObject) {
                     lastHitGameObject.SendMessage("OnDeselect");
                 }
                 hitInfo.transform.gameObject.SendMessage("OnSelect");
@@ -48,6 +48,7 @@ public class Cursor : MonoBehaviour {
         else {
             resetSelection();
         }
+
 		if (Input.GetKeyUp(KeyCode.Space)) {
             ToggleCubeGrab(new InteractionSourceKind(), 1, new Ray());
         }
