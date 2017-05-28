@@ -31,7 +31,7 @@ public class Cursor : MonoBehaviour {
                     Destroy(GameObject.Find("Orange Portal"));
                 }
                 var newPortal = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                newPortal.transform.localScale = new Vector3(.6f, .02f, .9f);
+                newPortal.transform.localScale = new Vector3(.55f, .02f, .95f);
                 newPortal.transform.position = hitInfo.point;
                 newPortal.GetComponent<Renderer>().material.color = shouldShootBluePortal ? new Color(0, 0, 255) : new Color(255, 140, 0);
                 newPortal.transform.rotation = hitInfo.transform.rotation;
