@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.VR.WSA.Input;
+using UnityEngine.Windows.Speech;
 
 public class Cursor : MonoBehaviour {
     private GameObject lastHitGameObject;
@@ -10,8 +12,11 @@ public class Cursor : MonoBehaviour {
     AudioSource audioSource;
     AudioClip portalGunShooting;
 
-	// Use this for initialization
-	void Start () {
+    KeywordRecognizer keywordRecognizer = null;
+    Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
+
+    // Use this for initialization
+    void Start () {
         recognizer = new GestureRecognizer();
         recognizer.TappedEvent += ToggleCubeGrab;
         recognizer.StartCapturingGestures();
@@ -23,7 +28,29 @@ public class Cursor : MonoBehaviour {
         audioSource.dopplerLevel = 0.0f;
         audioSource.rolloffMode = AudioRolloffMode.Logarithmic;
         portalGunShooting = Resources.Load<AudioClip>("PortalGunShooting");
-	}
+
+        keywords.Add("Give cube", () => {
+            SpawnCube();
+        });
+        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+        keywordRecognizer.Start();
+    }
+
+    void SpawnCube() {
+        var newCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        newCube.transform.localScale = new Vector3(.2f, .2f, .2f);
+        newCube.transform.position = Camera.main.transform.position;
+        newCube.AddComponent<Rigidbody>();
+        newCube.AddComponent<Cube>();
+    }
+
+    private void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args) {
+        System.Action keywordAction;
+        if (keywords.TryGetValue(args.text, out keywordAction)) {
+            keywordAction.Invoke();
+        }
+    }
 
     private void ToggleCubeGrab(InteractionSourceKind source, int tapCount, Ray headRay) {
         if (lastHitGameObject) {
@@ -88,5 +115,8 @@ public class Cursor : MonoBehaviour {
 		if (Input.GetKeyUp(KeyCode.Space)) {
             ToggleCubeGrab(new InteractionSourceKind(), 1, new Ray());
         }
-	}
+        else if (Input.GetKeyUp(KeyCode.KeypadEnter)) {
+            SpawnCube();
+        }
+    }
 }
